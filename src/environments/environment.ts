@@ -5,13 +5,13 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "AIzaSyA_cEEz5fJV4gTfWMw4sCPBA031WSIsr7s",
-    authDomain: "oshop-e21fc.firebaseapp.com",
-    databaseURL: "https://oshop-e21fc.firebaseio.com",
-    projectId: "oshop-e21fc",
+    apiKey: "AIzaSyBzKmzZvbPGvr8LJr70jA0Cdt3YOU0lSsA",
+    authDomain: "oshop-fef55.firebaseapp.com",
+    databaseURL: "https://oshop-fef55.firebaseio.com",
+    projectId: "oshop-fef55",
     storageBucket: "",
-    messagingSenderId: "88681285311",
-    appId: "1:88681285311:web:491e9e46856ec302"
+    messagingSenderId: "111658034316",
+    appId: "1:111658034316:web:e5dfd14f2de6a22e"
   }
 };
 
