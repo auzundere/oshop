@@ -16,10 +16,10 @@ export class ProductService {
     this.db.list('/products').push(product);
   }
 
-  // getAll() {
-  //   // return this.db.list('/products').snapshotChanges();
-  //   return this.db.list('/products').snapshotChanges();
-  // }
+  getAllObservable() {
+    return this.db.list('/products').snapshotChanges();
+  }
+
   getAll(): Observable<Product[]> {
     return this.db.list<Product>('/products')
       .snapshotChanges()
@@ -28,14 +28,18 @@ export class ProductService {
           changes.map(c => {
             const data = c.payload.val() as Product;
             const id = c.payload.key;
-            return { id, ...data };
+            console.log({id, ...data});
+            return {id, ...data};
           })
         )
       );
   }
-  get(productId) {
-    return this.db.list('/products/' + productId).valueChanges();
+
+  get(productId): Observable<Product> {
+    return this.db.object('/products/' + productId)
+      .snapshotChanges().pipe(map(p => p.payload.val() as Product));
   }
+
 
   update(productId, product) {
     return this.db.object('/products/' + productId).update(product);

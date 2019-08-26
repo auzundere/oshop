@@ -35,7 +35,6 @@ export class AdminProductsComponent implements OnInit, OnDestroy {
       .then(items => this.items = items);
     this.tableResource.count()
       .then(count => this.itemCount = count);
-    console.log(this.tableResource);
   }
 
   reloadItems(params) {
@@ -49,6 +48,7 @@ export class AdminProductsComponent implements OnInit, OnDestroy {
       this.products :
       this.products.filter(p => p.title.toLowerCase().includes(query.toLowerCase()));
     this.initializeTable(filteredProducts);
+
   }
 
   ngOnInit() {

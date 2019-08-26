@@ -3,7 +3,7 @@
     <form #f="ngForm" (ngSubmit)="save(f.value)">
       <div class="fom-group">
         <label for="title">Title</label>
-        <input #title="ngModel" [(ngModel)]="product[3]" name="title" id="title" type="text" class="form-control" required>
+        <input #title="ngModel" [(ngModel)]="product['title']" name="title" id="title" type="text" class="form-control" required>
         <div class="alert alert-danger" *ngIf="title.touched && title.invalid">
           Title is required.
         </div>
@@ -12,7 +12,7 @@
         <label for="price">Price</label>
         <div class="input-group">
           <span class="input-group-text">$</span>
-          <input #price="ngModel" [(ngModel)]="product[2]" name="price" id="price" type="number" class="form-control" required [min]="0">
+          <input #price="ngModel" [(ngModel)]="product['price']" name="price" id="price" type="number" class="form-control" required [min]="0">
         </div>
         <div class="alert alert-danger" *ngIf="price.touched && price.invalid">
           <div *ngIf="price.errors.required">Price is required.</div>
@@ -21,7 +21,7 @@
       </div>
       <div class="fom-group">
         <label for="category">Category</label>
-        <select #category="ngModel" [(ngModel)]="product[0]" name="category" id="category" class="form-control" required>
+        <select #category="ngModel" [(ngModel)]="product['category']" name="category" id="category" class="form-control" required>
           <option value=""></option>
           <option *ngFor="let c of categories$ | async" [value]="c.key">
             {{c.payload.val().name}}
@@ -33,7 +33,7 @@
       </div>
       <div class="fom-group">
         <label for="imageUrl">Image URL</label>
-        <input #imageUrl="ngModel" [(ngModel)]="product[1]" name="imageUrl" id="imageUrl" type="text" class="form-control" required url>
+        <input #imageUrl="ngModel" [(ngModel)]="product['imageUrl']" name="imageUrl" id="imageUrl" type="text" class="form-control" required url>
         <div class="alert alert-danger" *ngIf="imageUrl.touched && imageUrl.invalid">
           <div *ngIf="imageUrl.errors.required">ImageUrl is required.</div>
           <div *ngIf="imageUrl.errors.url">Please enter a valid URL.</div>
@@ -45,13 +45,7 @@
     </form>
   </div>
   <div class="col-md-6">
-    <div *ngIf="product[3]" class="card" style="width: 18rem;">
-      <img class="card-img-top" [src]="product[1]"  *ngIf="product[1]">
-      <div class="card-body">
-        <h5 class="card-title">{{product[3] }}</h5>
-        <p class="card-text">{{ product[2] | currency:'USD':true}}</p>
-      </div>
-    </div>
+    <product-card [product]="product" [show-actions]="false"></product-card>
   </div>
 </div>
 
