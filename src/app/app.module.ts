@@ -23,7 +23,12 @@ import {AuthService} from './auth.service';
 import {AuthGuard} from './auth-guard.service';
 import {UserService} from './user.service';
 import {AdminAuthGuard} from './admin-auth-guard.service';
-
+import {ProductFormComponent} from './admin/product-form/product-form.component';
+import {CategoryService} from './category.service';
+import {FormsModule} from '@angular/forms';
+import {ProductService} from './product.service';
+import {CustomFormsModule} from 'ng2-validation';
+import {DataTableModule} from 'angular5-data-table';
 
 // @ts-ignore
 @NgModule({
@@ -38,15 +43,19 @@ import {AdminAuthGuard} from './admin-auth-guard.service';
     MyOrdersComponent,
     AdminProductsComponent,
     AdminOrdersComponent,
-    LoginComponent
+    LoginComponent,
+    ProductFormComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     NgbModule,
+    CustomFormsModule,
+    DataTableModule,
     RouterModule.forRoot([
       {path: '', component: HomeComponent},
       {path: 'products', component: ProductsComponent},
@@ -57,6 +66,16 @@ import {AdminAuthGuard} from './admin-auth-guard.service';
       {path: 'order-success', component: OrderSuccessComponent, canActivate: [AuthGuard]},
       {path: 'my/orders', component: MyOrdersComponent, canActivate: [AuthGuard]},
 
+      {
+        path: 'admin/products/new',
+        component: ProductFormComponent,
+        canActivate: [AuthGuard, AdminAuthGuard]
+      },
+      {
+        path: 'admin/products/:id',
+        component: ProductFormComponent,
+        canActivate: [AuthGuard, AdminAuthGuard]
+      },
       {
         path: 'admin/products',
         component: AdminProductsComponent,
@@ -73,7 +92,9 @@ import {AdminAuthGuard} from './admin-auth-guard.service';
     AuthService,
     AuthGuard,
     AdminAuthGuard,
-    UserService
+    UserService,
+    CategoryService,
+    ProductService
   ],
   bootstrap: [AppComponent]
 })
