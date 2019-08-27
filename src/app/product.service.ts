@@ -28,7 +28,6 @@ export class ProductService {
           changes.map(c => {
             const data = c.payload.val() as Product;
             const id = c.payload.key;
-            console.log({id, ...data});
             return {id, ...data};
           })
         )
