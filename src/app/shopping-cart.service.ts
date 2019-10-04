@@ -13,21 +13,33 @@ export class ShoppingCartService {
   constructor(private db: AngularFireDatabase) {
   }
 
+  async getCart():Promise<Observable<ShoppingCart>> {
+    let cartId = await this.getOrCreateCartId();
+    let cartItems = this.db.object('/shopping-carts/' + cartId);
+    return cartItems.snapshotChanges()
+      .pipe(map(x => new ShoppingCart(x.payload.exportVal().items)));
+  }
+
   private create() {
     return this.db.list('/shopping-carts').push({
       dateCreated: new Date().getTime()
     });
   }
 
-  async getCart():Promise<Observable<ShoppingCart>> {
-    let cartId = await this.getOrCreateCartId();
-    return this.db.object('/shopping-carts/' + cartId).valueChanges()
-      .pipe(map(x => new ShoppingCart(x.items)));
-  }
+
 
   private getItem (cartId: string, productId: string) {
     return this.db.object('/shopping-carts/' + cartId + '/items/' + productId);
   }
+
+  async addToCart(product: Product) {
+    this.updateItem(product, 1);
+  }
+
+  async removeFromCart(product: Product) {
+    this.updateItem(product, -1);
+  }
+
   private async getOrCreateCartId(): Promise<string> {
     let cartId = localStorage.getItem('cartId');
     if (cartId) return cartId;
@@ -37,20 +49,23 @@ export class ShoppingCartService {
     return result.key;
   }
 
-  async addToCart(product: Product) {
-    this.updateItemQuantity(product, 1);
+  async clearCart() {
+    let cartId = await this.getOrCreateCartId();
+    this.db.object('/shopping-carts/' + cartId + '/items').remove();
   }
 
-  async removeFromCart(product: Product) {
-    this.updateItemQuantity(product, -1);
-  }
-
-  private async updateItemQuantity(product: Product, change: number){
+  private async updateItem(product: Product, change: number){
     let cartId = await this.getOrCreateCartId();
     let items$: Observable<any> = this.getItem(cartId, product.id).valueChanges();
     let item$$ = this.getItem(cartId, product.id);
     items$.pipe(take(1)).subscribe( item => {
-      item$$.update({product: product, quantity: (item === null ? 0 : item.quantity) + change});
+      item$$.update({
+        title: product.title,
+        imageUrl: product.imageUrl,
+        price: product.price,
+        quantity: (item === null ? 0 : item.quantity) + change
+      });
     });
   }
+
 }

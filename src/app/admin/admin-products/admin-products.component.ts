@@ -11,30 +11,30 @@ import { DataTableResource } from 'angular5-data-table';
 })
 export class AdminProductsComponent implements OnInit, OnDestroy {
   products: Product[];
+  filteredProduts: Product[];
   subscription: Subscription;
   tableResource: DataTableResource<Product>;
   items: Product[] = [];
   itemCount: number;
 
   constructor(private productService: ProductService) {
-
     this.subscription = this.productService.getAll()
       .subscribe(products => {
-        this.products = products;
-        this.initializeTable(products);
-      });
+        this.filteredProduts = this.products = products;
+      this.initilizeTable(products);
+    });
   }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
 
-  private initializeTable (products: Product[]) {
+  private initilizeTable(products: Product[]){
     this.tableResource = new DataTableResource(products);
     this.tableResource.query({offset: 0})
       .then(items => this.items = items);
     this.tableResource.count()
       .then(count => this.itemCount = count);
+  }
+
+  ngOnInit() {
   }
 
   reloadItems(params) {
@@ -44,13 +44,12 @@ export class AdminProductsComponent implements OnInit, OnDestroy {
       .then(items => this.items = items);
   }
   filter(query: string) {
-    let filteredProducts = (!query) ?
-      this.products :
-      this.products.filter(p => p.title.toLowerCase().includes(query.toLowerCase()));
-    this.initializeTable(filteredProducts);
-
+    this.filteredProduts = (query) ?
+      this.products.filter(p => p.title.toLowerCase().includes(query.toLowerCase())) :
+      this.products;
   }
 
-  ngOnInit() {
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
