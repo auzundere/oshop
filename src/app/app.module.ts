@@ -33,6 +33,7 @@ import {ProductCardComponent} from './product-card/product-card.component';
 import {ShoppingCartService} from './shopping-cart.service';
 import {ProductQuantityComponent} from './product-quantity/product-quantity.component';
 import { ProductFilterComponent } from './products/product-filter/product-filter.component';
+import {OrderService} from './order.service';
 
 // @ts-ignore
 @NgModule({
@@ -102,7 +103,8 @@ import { ProductFilterComponent } from './products/product-filter/product-filter
     UserService,
     CategoryService,
     ProductService,
-    ShoppingCartService
+    ShoppingCartService,
+    OrderService
   ],
   bootstrap: [AppComponent]
 })
